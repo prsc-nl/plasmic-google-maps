@@ -15,7 +15,7 @@ npm install plasmic-google-maps
 
 ## Components
 
-### LocationMap
+### GoogleMap
 
 A full-featured Google Maps container with configurable center, zoom, and UI controls.
 
@@ -31,7 +31,7 @@ A full-featured Google Maps container with configurable center, zoom, and UI con
 
 ### MapPin
 
-An advanced marker that renders inside a `LocationMap`. Supports fully custom content via its children slot.
+An advanced marker that renders inside a `GoogleMap`. Supports fully custom content via its children slot.
 
 | Prop       | Type     | Default | Description                             |
 | ---------- | -------- | ------- | --------------------------------------- |
@@ -46,32 +46,32 @@ Register the components with your Plasmic loader:
 
 ```tsx
 import { initPlasmicLoader } from "@plasmicapp/loader-nextjs";
-import { registerLocationMap } from "plasmic-google-maps";
+import { registerGoogleMap } from "plasmic-google-maps";
 
 const PLASMIC = initPlasmicLoader({ ... });
 
-registerLocationMap(PLASMIC);
+registerGoogleMap(PLASMIC);
 ```
 
-Once registered, **Location Map** and **Map Pin** will appear in the Plasmic Studio insert menu. Configure API key and map settings directly from the Studio props panel.
+Once registered, **Google Map** and **Map Pin** will appear in the Plasmic Studio insert menu. Configure API key and map settings directly from the Studio props panel.
 
 ## Standalone usage
 
 The components can also be used directly in React without Plasmic:
 
 ```tsx
-import { LocationMap, MapPin } from "plasmic-google-maps";
+import { GoogleMap, MapPin } from "plasmic-google-maps";
 
 function App() {
   return (
-    <LocationMap apiKey="YOUR_API_KEY" mapId="YOUR_MAP_ID" zoom={14}>
+    <GoogleMap apiKey="YOUR_API_KEY" mapId="YOUR_MAP_ID" zoom={14}>
       <MapPin lat={52.3676} lng={4.9041}>
         <span>Amsterdam</span>
       </MapPin>
       <MapPin lat={51.9225} lng={4.4792}>
         <span>Rotterdam</span>
       </MapPin>
-    </LocationMap>
+    </GoogleMap>
   );
 }
 ```

@@ -31,9 +31,9 @@ export const MapPin: React.FC<MapPinProps> = ({
   );
 };
 
-/* ─── LocationMap (parent component) ─── */
+/* ─── GoogleMap (parent component) ─── */
 
-export interface LocationMapProps {
+export interface GoogleMapProps {
   apiKey: string;
   mapId?: string;
   centerLat?: number;
@@ -43,7 +43,7 @@ export interface LocationMapProps {
   showControls?: boolean;
 }
 
-export const LocationMap: React.FC<LocationMapProps> = ({
+export const GoogleMap: React.FC<GoogleMapProps> = ({
   apiKey,
   mapId,
   centerLat = 51.9225,
@@ -73,12 +73,12 @@ export const LocationMap: React.FC<LocationMapProps> = ({
 
 /* ─── Plasmic Registration ─── */
 
-export function registerLocationMap(loader: PlasmicComponentLoader) {
+export function registerGoogleMap(loader: PlasmicComponentLoader) {
   loader.registerComponent(MapPin, {
     name: "MapPin",
     displayName: "Map Pin",
-    description: "A marker pin to place inside a Location Map",
-    parentComponentName: "LocationMap",
+    description: "A marker pin to place inside a Google Map",
+    parentComponentName: "GoogleMap",
     defaultStyles: {
       display: "flex",
       flexDirection: "column",
@@ -129,12 +129,12 @@ export function registerLocationMap(loader: PlasmicComponentLoader) {
         ],
       },
     },
-    importPath: "./components/LocationMap",
+    importPath: "./components/GoogleMap",
   });
 
-  loader.registerComponent(LocationMap, {
-    name: "LocationMap",
-    displayName: "Location Map",
+  loader.registerComponent(GoogleMap, {
+    name: "GoogleMap",
+    displayName: "Google Map",
     description: "Google Maps component with custom styling",
     props: {
       apiKey: {
@@ -193,6 +193,6 @@ export function registerLocationMap(loader: PlasmicComponentLoader) {
         ],
       },
     },
-    importPath: "./components/LocationMap",
+    importPath: "./components/GoogleMap",
   });
 }

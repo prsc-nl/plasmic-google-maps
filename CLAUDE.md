@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-plasmic-google-maps is a Plasmic code component library that wraps `@vis.gl/react-google-maps` to provide a `LocationMap` and `MapPin` component pair for use in Plasmic Studio.
+plasmic-google-maps is a Plasmic code component library that wraps `@vis.gl/react-google-maps` to provide a `GoogleMap` and `MapPin` component pair for use in Plasmic Studio.
 
 ## Commands
 
@@ -13,10 +13,10 @@ plasmic-google-maps is a Plasmic code component library that wraps `@vis.gl/reac
 
 ## Architecture
 
-Single-file library (`src/index.tsx`) exporting one registration function `registerLocationMap()` that registers two components with a Plasmic loader:
+Single-file library (`src/index.tsx`) exporting one registration function `registerGoogleMap()` that registers two components with a Plasmic loader:
 
-- **LocationMap** — parent component wrapping `APIProvider` + `Map`. Accepts Google Maps API key, map ID, center coordinates, zoom, and control toggles.
-- **MapPin** — child component (must be nested inside LocationMap) wrapping `AdvancedMarker`. Accepts lat/lng, z-index, and a slot for custom pin content.
+- **GoogleMap** — parent component wrapping `APIProvider` + `Map`. Accepts Google Maps API key, map ID, center coordinates, zoom, and control toggles.
+- **MapPin** — child component (must be nested inside GoogleMap) wrapping `AdvancedMarker`. Accepts lat/lng, z-index, and a slot for custom pin content.
 
 The package is published as ESM only (`"type": "module"`), outputting to `dist/` with declarations.
 
