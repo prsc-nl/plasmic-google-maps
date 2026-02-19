@@ -1,0 +1,198 @@
+import type React from "react";
+import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
+import type { PlasmicComponentLoader } from "@plasmicapp/loader-react";
+
+/* ─── MapPin (child component) ─── */
+
+export interface MapPinProps {
+  lat: number;
+  lng: number;
+  zIndex?: number;
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export const MapPin: React.FC<MapPinProps> = ({
+  lat,
+  lng,
+  zIndex,
+  className,
+  children,
+}) => {
+  const defaultZIndex = 90 - lat;
+  return (
+    <AdvancedMarker
+      position={{ lat, lng }}
+      zIndex={zIndex ?? defaultZIndex}
+      className={className}
+    >
+      {children}
+    </AdvancedMarker>
+  );
+};
+
+/* ─── LocationMap (parent component) ─── */
+
+export interface LocationMapProps {
+  apiKey: string;
+  mapId?: string;
+  centerLat?: number;
+  centerLng?: number;
+  zoom?: number;
+  children?: React.ReactNode;
+  showControls?: boolean;
+}
+
+export const LocationMap: React.FC<LocationMapProps> = ({
+  apiKey,
+  mapId,
+  centerLat = 51.9225,
+  centerLng = 4.47917,
+  zoom = 12,
+  children,
+  showControls = true,
+}) => {
+  return (
+    <APIProvider apiKey={apiKey}>
+      <Map
+        style={{ width: "100%", height: "100%" }}
+        defaultCenter={{ lat: centerLat, lng: centerLng }}
+        defaultZoom={zoom}
+        mapId={mapId}
+        disableDefaultUI={!showControls}
+        zoomControl={showControls}
+        streetViewControl={showControls}
+        mapTypeControl={false}
+        fullscreenControl={showControls}
+      >
+        {children}
+      </Map>
+    </APIProvider>
+  );
+};
+
+/* ─── Plasmic Registration ─── */
+
+export function registerLocationMap(loader: PlasmicComponentLoader) {
+  loader.registerComponent(MapPin, {
+    name: "MapPin",
+    displayName: "Map Pin",
+    description: "A marker pin to place inside a Location Map",
+    parentComponentName: "LocationMap",
+    defaultStyles: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    props: {
+      lat: {
+        type: "number",
+        displayName: "Latitude",
+        defaultValue: 51.9225,
+      },
+      lng: {
+        type: "number",
+        displayName: "Longitude",
+        defaultValue: 4.47917,
+      },
+      zIndex: {
+        type: "number",
+        displayName: "Z-Index",
+        description: "Stacking order of the pin",
+      },
+      children: {
+        type: "slot",
+        displayName: "Content",
+        defaultValue: [
+          {
+            type: "text",
+            value: "Location",
+            styles: {
+              background: "white",
+              padding: "2px 8px",
+              borderRadius: "4px",
+              fontSize: "12px",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+              marginBottom: "4px",
+            },
+          },
+          {
+            type: "img",
+            src: "/pin.png",
+            styles: {
+              width: "45px",
+              display: "block",
+            },
+          },
+        ],
+      },
+    },
+    importPath: "./components/LocationMap",
+  });
+
+  loader.registerComponent(LocationMap, {
+    name: "LocationMap",
+    displayName: "Location Map",
+    description: "Google Maps component with custom styling",
+    props: {
+      apiKey: {
+        type: "string",
+        displayName: "API Key",
+        description: "Google Maps API key",
+        defaultValue: "",
+      },
+      mapId: {
+        type: "string",
+        displayName: "Map ID",
+        description: "Google Maps Map ID (required for custom markers)",
+        defaultValue: "",
+      },
+      centerLat: {
+        type: "number",
+        displayName: "Center Latitude",
+        description: "Latitude of the map center",
+        defaultValue: 51.9225,
+      },
+      centerLng: {
+        type: "number",
+        displayName: "Center Longitude",
+        description: "Longitude of the map center",
+        defaultValue: 4.47917,
+      },
+      zoom: {
+        type: "number",
+        displayName: "Zoom Level",
+        description: "Map zoom level (1-20)",
+        defaultValue: 12,
+      },
+      showControls: {
+        type: "boolean",
+        displayName: "Show Controls",
+        description: "Show map controls (zoom, street view, fullscreen)",
+        defaultValue: true,
+      },
+      children: {
+        type: "slot",
+        displayName: "Pins",
+        description: "Map Pin markers to display on the map",
+        allowedComponents: ["MapPin"],
+        defaultValue: [
+          {
+            type: "component",
+            name: "MapPin",
+            props: {
+              lat: 51.9225,
+              lng: 4.47917,
+            },
+            styles: {
+              alignItems: "center",
+            },
+          },
+        ],
+      },
+    },
+    importPath: "./components/LocationMap",
+  });
+}
