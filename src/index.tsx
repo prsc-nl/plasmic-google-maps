@@ -2,6 +2,53 @@ import type React from "react";
 import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
 import type { PlasmicComponentLoader } from "@plasmicapp/loader-react";
 
+/* ─── MapBubble (speech-bubble label) ─── */
+
+export interface MapBubbleProps {
+  background?: string;
+  color?: string;
+  borderRadius?: number;
+  arrowSize?: number;
+  children?: React.ReactNode;
+  className?: string;
+}
+
+export const MapBubble: React.FC<MapBubbleProps> = ({
+  background = "#333",
+  color = "#fff",
+  borderRadius = 4,
+  arrowSize = 6,
+  children,
+  className,
+}) => {
+  return (
+    <div className={className} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div
+        style={{
+          background,
+          color,
+          padding: "4px 8px",
+          borderRadius,
+          whiteSpace: "nowrap",
+          fontSize: 13,
+          fontWeight: 500,
+        }}
+      >
+        {children}
+      </div>
+      <div
+        style={{
+          width: 0,
+          height: 0,
+          borderLeft: `${arrowSize}px solid transparent`,
+          borderRight: `${arrowSize}px solid transparent`,
+          borderTop: `${arrowSize}px solid ${background}`,
+        }}
+      />
+    </div>
+  );
+};
+
 /* ─── MapPin (child component) ─── */
 
 export interface MapPinProps {
@@ -76,6 +123,45 @@ export const GoogleMap: React.FC<GoogleMapProps> = ({
 /* ─── Plasmic Registration ─── */
 
 export function registerGoogleMap(loader: PlasmicComponentLoader) {
+  loader.registerComponent(MapBubble, {
+    name: "MapBubble",
+    displayName: "Map Bubble",
+    description: "A speech-bubble label with an arrow pointer",
+    props: {
+      background: {
+        type: "color",
+        displayName: "Background",
+        defaultValue: "#333",
+      },
+      color: {
+        type: "color",
+        displayName: "Text Color",
+        defaultValue: "#fff",
+      },
+      borderRadius: {
+        type: "number",
+        displayName: "Border Radius",
+        defaultValue: 4,
+      },
+      arrowSize: {
+        type: "number",
+        displayName: "Arrow Size",
+        defaultValue: 6,
+      },
+      children: {
+        type: "slot",
+        displayName: "Content",
+        defaultValue: [
+          {
+            type: "text",
+            value: "Label",
+          },
+        ],
+      },
+    },
+    importPath: "./components/GoogleMap",
+  });
+
   loader.registerComponent(MapPin, {
     name: "MapPin",
     displayName: "Map Pin",
